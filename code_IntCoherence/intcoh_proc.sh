@@ -60,6 +60,7 @@ fi
 
 #=== Process each scene pair in turn ===============================
 swaths="IW1 IW2 IW3" 
+while read -r line
 do
 	# read file pairs & output filename from the list file:
 	read pair_zipfile1 pair_zipfile2 out_filename <<< "$line"
