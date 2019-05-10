@@ -167,7 +167,7 @@ def main():
     if not os.path.isfile(XML_GRAPH1): sys.exit("Error: XML graph file '%s' does not exist." % XML_GRAPH1)
     if not os.path.isfile(XML_GRAPH2): sys.exit("Error: XML graph file '%s' does not exist." % XML_GRAPH2)
     if not os.path.isfile(XML_GRAPH3): sys.exit("Error: XML graph file '%s' does not exist." % XML_GRAPH3)
-    if not os.path.isdir(DEM_HGT_DIR): sys.exit("Error: DEM directory '%s' does not exist." % DEM_HGT_DIR)
+    if not os.path.isdir(DEF_DEM_DIR): sys.exit("Error: DEM directory '%s' does not exist." % DEF_DEM_DIR)
     if not os.path.isdir(SOURCE_DIR): sys.exit("Error: Source directory '%s' does not exist." % SOURCE_DIR)
     if not os.path.isdir(SOURCE_DIR+SOURCE_SUBDIR): sys.exit("Error: Source directory '%s' does not exist." % (SOURCE_DIR+SOURCE_SUBDIR))
     
@@ -333,7 +333,7 @@ def main():
         filepaths = [f for f in filepaths if not os.path.isfile(f.replace(SOURCE_DIR,cmdargs.base_save_dir).replace('.zip','.dim'))]
         nproc = tmp - len(filepaths)
         if nproc!=0:
-            print("A total of $i scenes (of %i) were found to be already processed (not re-processing)." % (nproc,tmp) )
+            print("A total of %i scenes (of %i) were found to be already processed (not re-processing)." % (nproc,tmp) )
     
     n_scenes = len(filepaths)
     if n_scenes==0: 

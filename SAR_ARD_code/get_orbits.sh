@@ -28,3 +28,12 @@ do
     # wget --quiet --mirror --no-parent --no-host-directories --cut-dirs=3 -R "index.html*" -P $target_dir $remoteURL
     wget --mirror --no-parent --no-host-directories --cut-dirs=3 -R "index.html*" -P $target_dir $remoteURL
 done
+
+
+# Make them accessible to group users:
+for p in $(find $target_dir -user $USER -type d); do
+    chmod -R g+wX $p
+done
+for p in $(find $target_dir -user $USER -type f); do
+    chmod g+w $p
+done

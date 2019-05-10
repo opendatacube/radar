@@ -164,7 +164,7 @@ def main():
     if not os.path.isfile(XML_GRAPH2): sys.exit("Error: XML graph file '%s' does not exist." % XML_GRAPH2)
     if not os.path.isfile(XML_GRAPH3): sys.exit("Error: XML graph file '%s' does not exist." % XML_GRAPH3)
     if not os.path.isfile(XML_GRAPH4): sys.exit("Error: XML graph file '%s' does not exist." % XML_GRAPH4)
-    if not os.path.isdir(DEM_HGT_DIR): sys.exit("Error: DEM directory '%s' does not exist." % DEM_HGT_DIR)
+    if not os.path.isdir(DEF_DEM_DIR): sys.exit("Error: DEM directory '%s' does not exist." % DEF_DEM_DIR)
     if not os.path.isdir(SOURCE_DIR): sys.exit("Error: Source directory '%s' does not exist." % SOURCE_DIR)
     if not os.path.isdir(SOURCE_DIR+SOURCE_SUBDIR): sys.exit("Error: Source directory '%s' does not exist." % (SOURCE_DIR+SOURCE_SUBDIR))
     
@@ -376,7 +376,7 @@ def main():
         return
         
     if n_not_reproc!=0: 
-        print("A total of $i scene pairs (of %i) were found to be already processed (not re-processing)." % (n_not_reproc,n_pairs) )
+        print("A total of %i scene pairs (of %i) were found to be already processed (not re-processing)." % (n_not_reproc,n_pairs) )
     
     
     # write separate lists of scene pairs (one per PBS job):

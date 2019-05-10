@@ -132,8 +132,11 @@ def main():
         lat_max += 0.02
         
         # create DEM subset:
-        cmd = 'gdal_translate -projwin %s %s %s %s' % (lon_min, lat_max, lon_max, lat_min)
-        cmd += ' -a_nodata 0 -projwin_srs EPSG:4326 %s %s' %(cmdargs.DEM_source, cmdargs.output_file)   # -of GTiff -co TILED=YES
+        #cmd = 'gdal_translate -projwin %s %s %s %s' % (lon_min, lat_max, lon_max, lat_min)
+        #cmd += ' -a_nodata 0 -projwin_srs EPSG:4326 %s %s' %(cmdargs.DEM_source, cmdargs.output_file)   # -of GTiff -co TILED=YES
+        # gdalwarp will convert input nodata to 0
+        cmd = 'gdalwarp -dstnodata 0 -te %s %s %s %s' % (lon_min, lat_min, lon_max, lat_max)
+        cmd += ' -te_srs EPSG:4326 %s %s' %(cmdargs.DEM_source, cmdargs.output_file)
         res = os.system(cmd)
         
     else:
