@@ -1,0 +1,38 @@
+<graph id="Graph">
+  <version>1.0</version>
+  <node id="Read">
+    <operator>Read</operator>
+    <sources/>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <file>${file1}</file>
+      <formatName>BEAM-DIMAP</formatName> 
+    </parameters>
+  </node>
+  <node id="Read(2)">
+    <operator>Read</operator>
+    <sources/>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+	  <file>${file2}</file>
+      <formatName>BEAM-DIMAP</formatName> 
+	</parameters>
+  </node>
+  <node id="Read(3)">
+    <operator>Read</operator>
+    <sources/>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+	  <file>${file3}</file>
+      <formatName>BEAM-DIMAP</formatName> 
+	</parameters>
+  </node>
+  <node id="TOPSAR-Merge">
+    <operator>TOPSAR-Merge</operator>
+    <sources>
+      <sourceProduct refid="Read"/>
+      <sourceProduct.1 refid="Read(2)"/>
+      <sourceProduct.2 refid="Read(3)"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <selectedPolarisations/>
+    </parameters>
+  </node>
+</graph>

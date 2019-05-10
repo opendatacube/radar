@@ -1,0 +1,69 @@
+<graph id="Graph">
+  <version>1.0</version>
+  <node id="TOPSAR-Split">
+    <operator>TOPSAR-Split</operator>
+    <sources>
+      <sourceProduct>${scene1}</sourceProduct>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <subswath>${swath}</subswath>
+      <selectedPolarisations/>
+      <firstBurstIndex>1</firstBurstIndex>
+      <lastBurstIndex>9999</lastBurstIndex>
+      <wktAoi/>
+    </parameters>
+  </node>
+  <node id="TOPSAR-Split(2)">
+    <operator>TOPSAR-Split</operator>
+    <sources>
+      <sourceProduct>${scene2}</sourceProduct>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <subswath>${swath}</subswath>
+      <selectedPolarisations/>
+      <firstBurstIndex>1</firstBurstIndex>
+      <lastBurstIndex>9999</lastBurstIndex>
+      <wktAoi/>
+    </parameters>
+  </node>
+  <node id="Apply-Orbit-File">
+    <operator>Apply-Orbit-File</operator>
+    <sources>
+      <sourceProduct refid="TOPSAR-Split"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <orbitType>Sentinel Precise (Auto Download)</orbitType>
+      <polyDegree>3</polyDegree>
+      <continueOnFail>false</continueOnFail>
+    </parameters>
+  </node>
+  <node id="Apply-Orbit-File(2)">
+    <operator>Apply-Orbit-File</operator>
+    <sources>
+      <sourceProduct refid="TOPSAR-Split(2)"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <orbitType>Sentinel Precise (Auto Download)</orbitType>
+      <polyDegree>3</polyDegree>
+      <continueOnFail>false</continueOnFail>
+    </parameters>
+  </node>
+  <node id="Back-Geocoding">
+    <operator>Back-Geocoding</operator>
+    <sources>
+      <sourceProduct refid="Apply-Orbit-File"/>
+      <sourceProduct.1 refid="Apply-Orbit-File(2)"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <demName>External DEM</demName>
+      <demResamplingMethod>BICUBIC_INTERPOLATION</demResamplingMethod>
+      <externalDEMFile>${externalDEMFile}</externalDEMFile>
+      <externalDEMNoDataValue>-32768</externalDEMNoDataValue>
+      <resamplingType>BICUBIC_INTERPOLATION</resamplingType>
+      <maskOutAreaWithoutElevation>true</maskOutAreaWithoutElevation>
+      <outputRangeAzimuthOffset>false</outputRangeAzimuthOffset>
+      <outputDerampDemodPhase>false</outputDerampDemodPhase>
+      <disableReramp>false</disableReramp>
+    </parameters>
+  </node>
+</graph>
