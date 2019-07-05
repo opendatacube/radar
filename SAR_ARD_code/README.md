@@ -38,8 +38,6 @@ pip3.4 install -v --user requests
 
 ## Linking SNAP to orbit and DEM files
 
-### DEM tiles
-
 A major issue with an execution of the code on the NCI is that the compute nodes do not have a network interface. This creates an issue with a standard processing where GPT attempts to automatically download the tiles of DEM data and orbit files required for the processing.
 
 To circumvent this issue, the DEM and orbit data can be downloaded prior to execution of the code. This can be done using `get_DEM.sh` (edit it and run it only once to download all DEM tiles over Australia and place them into a specific directory) and `get_orbits.sh` (edit it and run it at regular intervals to update the database, in order to process the latest Sentinel-1 data).
@@ -49,8 +47,6 @@ To circumvent this issue, the DEM and orbit data can be downloaded prior to exec
 After downloading these datasets, the code automatically uses the pre-downloaded DEM tiles to create the DEM data layer required by GPT during the processing (if you downloaded the DEM tiles to a specific folder, you will need to update the variable `DEF_DEM_DIR` in the `<task>_proc_qsub.py` code).
 
 **Note**: as opposed to the orbit files, no way was found to directly point SNAP / GPT to a directory of pre-downloaded DEM tiles (SNAP still tries to connect to the ESA server, even if all tiles have been pre-downloaded); hence the adopted approach of compositing the tiles during execution and feeding the resulting DEM mosaic to GPT instead.
-
-### Orbit files
 
 With the orbit files, GPT will automatically look for these in the user's `.snap` directory, created during the installation of the SNAP software (or when the NCI SNAP module is loaded / used). Therefore, for GPT to automatically use the pre-downloaded orbit files, the user needs to create a symbolic link from their `.snap/auxdata` directory to the repository where the files have been pre-downloaded:
 
