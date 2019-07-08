@@ -27,6 +27,19 @@ Alternatively, SNAP can be manually installed (and updated) if needed. This give
 -Dsnap.userdir=/g/data/path/to/new/folder/.snap
 ```
 
+### MEM requirements in SNAP
+
+SNAP has an internal "user-defined" memory limit, which determines how much RAM can / will be used during execution of a SNAP / GPT processing sequence. The value of this memory limit is automatically determined upon installation of the software, and depends on the specific computational platform it is installed on. On the NCI and VDI systems, this limit appears to be set to 65GB originally.
+
+The user can, however, modify this memory amount. This can be done by editing the file `gpt.vmoptions` in the user's `.snap` install directory (e.g. `~/.snap/bin/gpt`), and altering the following line accordingly:
+
+```bash
+-Xmx=65GB
+```
+
+The user needs to be aware of this internal limit as it determines how much RAM is used / requested by SNAP during the processing. Therefore, upon submitting to PBS, the user must ensure that the NCI job's MEM request is **larger** than this specific SNAP memory limit (currently set to 88GB in the code). 
+
+
 ### Python module `requests`
 
 Another requirement for the code to work seamlessly is to have the Python module `requests` installed on the system. With Python3.4 (currently used in the code), this module seems to be currently missing and thus needs to be installed manually by the user. This can be done by executing the following in a terminal on the NCI / VDI:
