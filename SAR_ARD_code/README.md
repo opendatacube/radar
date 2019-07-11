@@ -38,13 +38,13 @@ Alternatively, SNAP can be manually installed (and updated) if needed. This give
 
 SNAP has an internal "user-defined" memory limit, which determines how much RAM can / will be used during execution of a SNAP / GPT processing sequence. The value of this memory limit is automatically determined upon installation of the software, and depends on the specific computational platform it is installed on. On the NCI and VDI systems, this limit appears to be set to 65GB originally.
 
-The user can, however, modify this memory amount. This can be done by editing the file `gpt.vmoptions` in the user's `.snap` install directory (e.g. `~/.snap/bin/gpt`), and altering the following line accordingly:
+The user can, however, modify this memory amount. This can be done by editing the file `gpt.vmoptions` in the user's `snap` install directory (e.g. `~/snap/bin/gpt`), and altering the following line accordingly:
 
 ```bash
 -Xmx=65GB
 ```
 
-The user needs to be aware of this internal limit as it determines how much RAM is used / requested by SNAP during the processing. Therefore, upon submitting to PBS, the user must ensure that the NCI job's MEM request is **larger** than this specific SNAP memory limit (currently set to 88GB in the code). 
+The user needs to be aware of this internal limit as it determines how much RAM is used / requested by SNAP during the processing. Therefore, upon submitting to PBS, the user must ensure that the NCI job's MEM request is **larger** than this specific SNAP memory limit (currently set to 88GB in the code). In the implementation of the code above, the internal SNAP MEM limit assumed to be `-Xmx=65GB`, and the code submits SBATCH jobs with a MEM request of 88GB. 
 
 
 ### Python module `requests`
