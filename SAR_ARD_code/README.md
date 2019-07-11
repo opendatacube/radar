@@ -10,7 +10,14 @@ The general approach used in the code is simlar for the three types of data prod
 1. the jobs are executed on the NCI on the basis of the `<task>_proc.sh` scripts and the corresponding `.xml` files (executed by GPT)
 1. upon completion of the jobs, the data is generated in the desired directory, and various ancillary and diagnostics files can be investigated.
  
-Please refer to the documentation file `SAR ARD code summary.pdf` for more detailed information, including the various user parameters that can be defined.
+A typical command-line execution of `<task>_proc_qsub.py` (e.g. for `<task>` = `backsc`) on the NCI looks like this:
+
+```bash
+module load python3/3.4.3 python3/3.4.3-matplotlib
+python3.4 backsc_proc_qsub.py --bbox 145.5 146.5 -35.0 -34.0 --startdate 2018-01-01 --enddate 2018-01-30 --jobs_basename /g/data/prj999/user123/test_log/ --base_save_dir /g/data/prj999/user123/test_proc_output/
+```
+
+Please refer to the code files directly (comments and GLOBAL variables at the top of the files) as well as the documentation file `SAR ARD code summary.pdf` for more detailed information, including the various user parameters that can be defined.
 
 
 ## Prerequisites
