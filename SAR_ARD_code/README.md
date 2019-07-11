@@ -44,7 +44,7 @@ The user can, however, modify this memory amount. This can be done by editing th
 -Xmx=65GB
 ```
 
-The user needs to be aware of this internal limit as it determines how much RAM is used / requested by SNAP during the processing. Therefore, upon submitting to PBS, the user must ensure that the NCI job's MEM request is **larger** than this specific SNAP memory limit (currently set to 88GB in the code). In the implementation of the code above, the internal SNAP MEM limit assumed to be `-Xmx=65GB`, and the code submits SBATCH jobs with a MEM request of 88GB. 
+The user needs to be aware of this internal limit as it determines how much RAM is used / requested by SNAP during the processing. Therefore, upon submitting to PBS, the user must ensure that the NCI job's MEM request is **larger** than this specific SNAP memory limit (currently set to 88GB in the code). In the implementation of the code above, the internal SNAP MEM limit is assumed to be `-Xmx=65GB`, and the code submits PBS jobs with a MEM request of 88GB. 
 
 
 ### Python module `requests`
