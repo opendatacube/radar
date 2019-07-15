@@ -84,5 +84,19 @@ Following an original installation of SNAP, a software update was performed to c
 
 To remedy this, the script `postproc_out_file.sh` is automatically executed (submitted as PBS job) upon completion of the backscatter routine `backsc_proc.sh`, and will automatically clean up the resulting `.out` files.
 
+## SNAP software update
+
+If desired, an update of SNAP can be achieved by running the following command in a terminal:
+
+```bash
+cd /your/install/path/to/snap/bin
+snap --nosplash --nogui --modules --update-all
+```
+
+When / if the update process reaches (and hangs at) the "updates = 0" stage, the user can then safely press Ctrl-C to terminate the update (apparently a known SNAP bug). 
+
+**Note**: as well as fixing the above-mentioned post-March '18 issue, updating SNAP may potentially also break other parts of the SNAP processing routine! Updates of the SNAP software is at the user's own risk!
+
+
 # Author
 **Eric Lehmann**, CSIRO Data61, as part of the joint CSIRO -- GA SAR ARD DataCube project.
