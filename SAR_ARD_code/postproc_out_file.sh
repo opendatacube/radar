@@ -44,38 +44,15 @@ tmp_out_file=${PROC_OUT_FILE}.bak
 mv $PROC_OUT_FILE $tmp_out_file
 
 # remove dodgy lines:
-cnt=0
-while read -r line; do
-	cnt=$((cnt+1))
-	if [[ ! $line == getGeoPos* ]] && [[ ! $line == "x = "* ]] ; then 
-		if [[ $line == ".x = "* ]] ; then
-			echo -n "." >> $PROC_OUT_FILE
-		elif [[ $line == "..x = "* ]] ; then
-			echo -n ".." >> $PROC_OUT_FILE
-		elif [[ $line == ".getGeoPos"* ]] ; then
-			echo -n "." >> $PROC_OUT_FILE
-		elif [[ $line == "..getGeoPos"* ]] ; then
-			echo -n ".." >> $PROC_OUT_FILE
-		elif [[ $line == *"%x = "* ]] ; then
-			ind=`expr index "$line" "%x = "`
-			echo -n ${line:0:$ind} >> $PROC_OUT_FILE
-		elif [[ $line == *"%getGeoPos"* ]] ; then
-			ind=`expr index "$line" "%getGeoPos"`
-			echo -n ${line:0:$ind} >> $PROC_OUT_FILE
-		elif [[ $line == *"%.x = "* ]] ; then
-			ind=`expr index "$line" "%.x = "`
-			echo -n ${line:0:$ind} >> $PROC_OUT_FILE
-		elif [[ $line == *"%.getGeoPos"* ]] ; then
-			ind=`expr index "$line" "%.getGeoPos"`
-			echo -n ${line:0:$ind} >> $PROC_OUT_FILE
-		else
-			cnt=$((cnt-1))
-			echo "$line" >> $PROC_OUT_FILE
-		fi
-	fi
-done < "${tmp_out_file}"
-
-echo -e "\n" >> $PROC_OUT_FILE
-echo "Removed" $cnt "'GetGeoPos' error lines from original .out file." >> $PROC_OUT_FILE
+awk '
+/^x = / {++cnt; next}
+/^getGeoPos/ {++cnt; next}
+/^(\.)+getGeoPos/ {++cnt; gsub(/getGeoPos.*/, ""); printf $0; next}
+/\%(\.)*getGeoPos:/ {++cnt; gsub(/getGeoPos.*/, ""); printf $0; next} 
+/^(\.)+x = / {++cnt; gsub(/x = .*/, ""); printf $0; next}
+/\%(\.)*x = / {++cnt; gsub(/x = .*/, ""); printf $0; next}
+{print $0}
+END {print ""; print "Removed", cnt, "'GetGeoPos' error lines from original .out file."} 
+' $tmp_out_file > $PROC_OUT_FILE
 
 rm $tmp_out_file
