@@ -1,6 +1,5 @@
 #!/bin/bash
 #PBS -N PostProc
-#PBS -P qd04
 #PBS -q normal
 #PBS -l walltime=20:00,ncpus=1,mem=3GB
 #PBS -l wd,other=gdata1

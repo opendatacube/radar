@@ -195,7 +195,8 @@ if [ -z "$VDI_JOB" ]; then	# job executed on NCI
 	proc_out_file=${ARG_FILE_LIST/.list/.out}
 	pproc_base=${ARG_FILE_LIST/.list/_postproc}
 	
-	echo qsub -o ${pproc_base}.out -e ${pproc_base}.err -v PROC_OUT_FILE=$proc_out_file postproc_out_file.sh
-	qsub -o ${pproc_base}.out -e ${pproc_base}.err -v PROC_OUT_FILE=$proc_out_file postproc_out_file.sh
+	qsub_cmd="qsub -o ${pproc_base}.out -e ${pproc_base}.err -v PROC_OUT_FILE=$proc_out_file -P $NCI_PROJ postproc_out_file.sh"
+	echo $qsub_cmd
+	$qsub_cmd
 	echo
 fi

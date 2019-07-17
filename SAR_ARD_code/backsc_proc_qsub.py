@@ -417,6 +417,7 @@ def main():
             dvstr += ",BASE_SAVE_DIR=%s" % cmdargs.base_save_dir
             dvstr += ",PIX_RES=%s" % cmdargs.pixel_res
             dvstr += ",DEM_SOURCE=%s" % cmdargs.DEM_source_file
+            dvstr += ",NCI_PROJ=%s" % cmdargs.nci_project
             if not cmdargs.gpt_exec is None:
                 dvstr += ",GPT_EXEC=%s" % cmdargs.gpt_exec
             if cmdargs.express_queue:
