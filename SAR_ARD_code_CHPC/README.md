@@ -3,7 +3,7 @@
 
 This code automates the processing of Sentinel-1 SAR data to ARD (analysis-ready data) products on the CSIRO High-Performance Computing (CHPC) systems. The processing uses the graph processing tool (GPT) from the SNAP toolbox to produce backscatter (`backsc`), dual polarimetry decomposition (`dualpol`), and interferometric coherence (`intcoh`) ARD products.
 
-The code base for this project is strongly correlated with the code available on the GitHub repository [ODC-Radar/SAR_ARD_Code](https://github.com/opendatacube/radar/tree/master/SAR_ARD_code_NCI), which was developed to perform similar processing of SAR data on the National Computational Infrastructure ([NCI](http://nci.org.au/)).
+The code base for this project is strongly correlated with the code available on the GitHub repository [ODC-Radar/SAR_ARD_Code_NCI](https://github.com/opendatacube/radar/tree/master/SAR_ARD_code_NCI), which was developed to perform similar processing of SAR data on the National Computational Infrastructure ([NCI](http://nci.org.au/)).
 
 
 ## Getting Started
