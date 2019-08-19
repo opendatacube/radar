@@ -235,7 +235,7 @@ def main():
     if cmdargs.jobs_basename is None:
         cmdargs.jobs_basename = tmp
     elif cmdargs.jobs_basename.endswith("/"): 
-        if not os.path.isdir(cmdargs.jobs_basename): os.mkdir(cmdargs.jobs_basename)
+        os.makedirs(cmdargs.jobs_basename, exist_ok=True)
         cmdargs.jobs_basename += tmp
     
     if not cmdargs.base_save_dir.endswith("/"): cmdargs.base_save_dir += "/"
@@ -303,6 +303,7 @@ def main():
     
     # make a paged SARA query:
     filepaths = []
+    SARA_IDs = []
     queryUrl += "&maxRecords=50"
     page = 1
     if cmdargs.verbose: print(queryUrl)
@@ -315,6 +316,7 @@ def main():
             print("Returned {0} products in page {1}.".format(nresult, page))
 
         # extract list of products
+        SARA_IDs += [i["properties"]["services"]["download"]["url"].split('/')[-2] for i in result["features"]]
         filepaths += [quicklook_to_filepath(i["properties"]["quicklook"], cmdargs.validatefilepaths) for i in result["features"]]
             
         # go to next page until nresult=0
@@ -325,12 +327,15 @@ def main():
         nresult = result["properties"]["itemsPerPage"]
 
     # final list of products:
+    SARA_IDs = [SARA_IDs[ii] for ii,ff in enumerate(filepaths) if ff is not None]     # extract corresponding SARA IDs
     filepaths = [ii for ii in filepaths if ii is not None]
     
     # if needed, exclude files already done:
     if not cmdargs.reprocess_existing:
         tmp = len(filepaths)
-        filepaths = [f for f in filepaths if not os.path.isfile(f.replace(SOURCE_DIR,cmdargs.base_save_dir).replace('.zip','.dim'))]
+        ind = [ii for ii,ff in enumerate(filepaths) if not os.path.isfile(ff.replace(SOURCE_DIR,cmdargs.base_save_dir).replace('.zip','.dim'))]
+        filepaths = [filepaths[ii] for ii in ind]
+        SARA_IDs = [SARA_IDs[ii] for ii in ind]     # corresponding SARA IDs
         nproc = tmp - len(filepaths)
         if nproc!=0:
             print("A total of %i scenes (of %i) were found to be already processed (not re-processing)." % (nproc,tmp) )
@@ -342,6 +347,7 @@ def main():
     
     
     # write separate lists of scenes (one per PBS job):
+    filepaths = [ff+' '+SARA_IDs[ii] for ii,ff in enumerate(filepaths)]     # combine file paths with SARA IDs
     n_jobs = np.ceil( float(n_scenes) / cmdargs.scenes_per_job )
     if not cmdargs.VDI_jobs and n_jobs>MAX_N_JOBS: sys.exit('Error: Too many NCI jobs for this query.')
     jobs_arr = np.array_split( filepaths, n_jobs )
@@ -353,7 +359,7 @@ def main():
         slist_name = cmdargs.jobs_basename + '_%03i.list' % ind
         with open(slist_name,'w') as ln:
             ln.writelines( map(lambda x: x + '\n', job) )
-    
+
     # create job scripts:
     if cmdargs.VDI_jobs:    # create shell script for execution on VDI
         out_fname = os.path.basename( cmdargs.jobs_basename ) + '.sh'   # create .sh file in same dir as other executables

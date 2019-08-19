@@ -232,7 +232,7 @@ def main():
     if cmdargs.jobs_basename is None:
         cmdargs.jobs_basename = tmp
     elif cmdargs.jobs_basename.endswith("/"): 
-        if not os.path.isdir(cmdargs.jobs_basename): os.mkdir(cmdargs.jobs_basename)
+        os.makedirs(cmdargs.jobs_basename, exist_ok=True)
         cmdargs.jobs_basename += tmp
     
     if not cmdargs.base_save_dir.endswith("/"): cmdargs.base_save_dir += "/"
@@ -300,6 +300,7 @@ def main():
     
     # make a paged SARA query:
     filepaths = []
+    SARA_IDs = []
     queryUrl += "&maxRecords=50"
     page = 1
     if cmdargs.verbose: print(queryUrl)
@@ -312,6 +313,7 @@ def main():
             print("Returned {0} products in page {1}.".format(nresult, page))
 
         # extract list of products
+        SARA_IDs += [i["properties"]["services"]["download"]["url"].split('/')[-2] for i in result["features"]]
         filepaths += [quicklook_to_filepath(i["properties"]["quicklook"], cmdargs.validatefilepaths) for i in result["features"]]
             
         # go to next page until nresult=0
@@ -322,6 +324,7 @@ def main():
         nresult = result["properties"]["itemsPerPage"]
 
     # final list of products:
+    SARA_IDs = [SARA_IDs[ii] for ii,ff in enumerate(filepaths) if ff is not None]     # extract corresponding SARA IDs
     filepaths = [ii for ii in filepaths if ii is not None]
     n_scenes = len(filepaths)
     
@@ -331,6 +334,7 @@ def main():
     n_not_reproc = 0
     for ind1 in range(n_scenes):
         SAR_infile = filepaths[ind1]
+        infile_SARAid = SARA_IDs[ind1]
         xml_file = SAR_infile.replace(".zip", ".xml")
         xml_ImageDoc = minidom.parse(xml_file)  # open the .xml file to read
         
@@ -345,6 +349,7 @@ def main():
         # check SAR_infile with remaining files in the list to see if any are interferometry pairs:
         for ind2 in range(ind1+1, n_scenes):
             SAR_infile2 = filepaths[ind2]
+            infile2_SARAid = SARA_IDs[ind2]
             xml_file2 = SAR_infile2.replace(".zip", ".xml")
             xml_ImageDoc2 = minidom.parse(xml_file2)    # open the .xml file to read
             
@@ -366,7 +371,7 @@ def main():
                 out_filename = tmp2 + "__" + tmp + "_" + date1 + "_" + date2 + "_IntCoh.dim"
                 
                 if not os.path.isfile(out_filename) or cmdargs.reprocess_existing:
-                    filepairs.append( SAR_infile2 + ' ' + SAR_infile + ' ' + out_filename )
+                    filepairs.append( SAR_infile2 + ' ' + SAR_infile + ' ' + out_filename + ' ' + infile2_SARAid + ' ' + infile_SARAid )
                 else:
                     n_not_reproc += 1
     
