@@ -4,6 +4,7 @@ On the National Computational Infrastructure (NCI), a test database has been set
 An authorised user can access this test database with connection parameters defined in a configuration file (e.g. radar.conf).
 
 In a terminal on the NCI, the DEA data cube can then be used with the following lines:
+
 module use /g/data/v10/public/modules/modulefiles
 module load dea
 
