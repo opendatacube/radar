@@ -19,17 +19,23 @@ Data cubes require YAML files to define product specifications and index into da
 The following describes the steps required in the creation of the three SAR ARD products in the data cube, including its indexing:
 
 •	Define product:
+
 $ datacube product add S1_XXX_productdef.yaml
+
 where XXX is either ‘Backscatter’ (Gamma0 backscatter), ‘DualPolDecomp’ (a-h-alpha dual polarimetric decomposition) 
 or ‘IntCoh’ (interferometric coherence). 
 
 •	Create yaml file for each scene:
+
 $ python S1_XXX_scene_yamls_multi.py
+
 where XXX is ‘Backscatter’, DualPolDecomp’, or ‘IntCoherence’. 
 This creates a .yaml file for each scene within the folder structure defined in the .py file. 
 The S1_XXX_scene_yamls_multi.py program extracts all the relevant metadata information required for reading in the data cube, 
 as well as retaining relevant metadata information required to meet CARD4L compliance.
 
 •	Index each scene into datacube:
+
 $ datacube dataset add SAR_ARD_file.yaml
+
 This can be automated for multiple files using similar python code to S1_datacube_index.py.
