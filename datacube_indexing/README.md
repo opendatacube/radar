@@ -20,7 +20,7 @@ The following describes the steps required in the creation of the three SAR ARD 
 
 **•	Define product:**
 
-$ datacube product add S1_XXX_productdef.yaml
+*$ datacube product add S1_XXX_productdef.yaml*
 
 where XXX is either ‘Backscatter’ (Gamma0 backscatter), ‘DualPolDecomp’ (a-h-alpha dual polarimetric decomposition) 
 or ‘IntCoh’ (interferometric coherence). 
