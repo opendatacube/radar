@@ -1,0 +1,33 @@
+name: s1_IntCoh_scene
+description: Sentinel-1A/B SAR Interferometric coherence scenes, processed to the CEOS ARD standard - Orbit updates, back-geocoding, interferogram generation, multilooking and terrain correction, orthorectification.
+metadata_type: eo
+
+metadata:
+  format: {name: ENVI}
+  instrument: {name: SAR}
+  platform: {code: SENTINEL_1}
+  product_type: int_coh
+
+measurements:
+- name: coh_vv
+  units: '1'
+  dtype: float32
+  nodata: 0
+  
+measurements:
+- name: coh_vh
+  units: '1'
+  dtype: float32
+  nodata: 0
+  
+measurements:
+- name: int_vv
+  units: '1'
+  dtype: float32
+  nodata: 0
+  
+measurements:
+- name: int_vh
+  units: '1'
+  dtype: float32
+  nodata: 0

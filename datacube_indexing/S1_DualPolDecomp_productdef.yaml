@@ -1,0 +1,25 @@
+name: s1_Decomp_scene
+description: Sentinel-1A/B SAR Dual-polarimetric (H/A/Alpha) decomposition scenes, processed to the CEOS ARD standard - Orbit updates, radiometric calibration, multilooking and terrain correction, orthorectification.
+metadata_type: eo
+
+metadata:
+  format: {name: ENVI}
+  instrument: {name: SAR}
+  platform: {code: SENTINEL_1}
+  product_type: h_a_alpha
+
+measurements:
+- name: alpha
+  units: '1'
+  dtype: float32
+  nodata: 0
+
+- name: anisotropy
+  units: '1'
+  dtype: float32
+  nodata: 0
+  
+- name: entropy
+  units: '1'
+  dtype: float32
+  nodata: 0
