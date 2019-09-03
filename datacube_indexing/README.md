@@ -6,10 +6,13 @@ An authorised user can access this test database with connection parameters defi
 In a terminal on the NCI, the DEA data cube can then be used with the following lines:
 
 module use /g/data/v10/public/modules/modulefiles
+
 module load dea
 
 The data within the data cube can be accessed within a jupyter notebook, for example, with the following code:
+
 import datacube
+
 dc = datacube.Datacube(config=’radar.conf’)
 
 Data cubes require YAML files to define product specifications and index into data cubes. 
