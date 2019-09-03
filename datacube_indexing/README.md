@@ -1,4 +1,4 @@
-##How to insert SAR ARD into a data cube:
+## How to insert SAR ARD into a data cube:
 
 On the National Computational Infrastructure (NCI), a test database has been set up in the Digital Earth Australia (DEA) development environment. 
 An authorised user can access this test database with connection parameters defined in a configuration file (e.g. radar.conf).
