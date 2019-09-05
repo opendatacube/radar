@@ -6,6 +6,9 @@ each as ENVI format, that is, raw binary (.img) with ascii header (.hdr).
 Each scene needs to have a _yaml.info file (created during the ARD processing) for creating the yaml file. 
 The output yaml file captures the information required to meet the CARD4L specifications where possible.
 Adapted from code written by Ben Lewis and Fang Yuan.
+
+September 2019 - Updated to look for  _yaml.info file, and it not found it uses the old method of looking for the
+ .list and .out files to extract relevant metadata
 """
 
 import rasterio
@@ -168,7 +171,35 @@ def prep_dataset(path):
             if L.find('RSTB Polarimetric SAR Tools:') != -1: SNAP_Pol = L.split(': ')[1].strip()
             if L.find('input xml:') != -1: input_xml_file = L.split(': ')[1].strip()       
         f.close
-    else: print('No _yaml.info file found for scene!')
+    else:    
+        print('No _yaml.info file found for scene. Looking through .out file instead!')
+
+        text_sub = "Zip file nr."
+        statis_line = "temporary line"
+        for root, dirs, jobfiles in os.walk(ARD_output_log_directory):
+            for jobfile in jobfiles:
+                if jobfile.endswith('.list'):
+                    jobfilename=os.path.join(root,jobfile)
+                    f = open(jobfilename, "r") # open the .list file to look for scene name
+                    for L in f:
+                        if L.find(scene_name) != -1:
+                            try: SARA_id = L.split(' ')[1]
+                            except: print('SARA_id not found')
+                            exists = os.path.isfile(jobfilename.replace('.list','.out'))
+                            if exists:
+                                processing_output_file = jobfilename.replace('.list','.out')
+                                f2 = open(processing_output_file, "r") # scene name found, so opening .out file
+                                for L2 in f2:
+                                    if L2.find(text_sub) != -1: temp_file_nr = L2.split(' ')[3]
+                                    if L2.find(scene_name) != -1:
+                                        file_nr = temp_file_nr.strip()
+                                        if os.path.isfile(L2.strip().replace('.zip','.xml')): input_xml_file = L2.strip().replace('.zip','.xml')
+                                        statis_line = "Scene processed ("+file_nr
+                                    if L2.find(statis_line) != -1: processing_message = L2.rstrip().split(':')[1] 
+                                    if L2.find("Resource Usage on") != -1: time_processed = L2.lstrip().split(' ')[3]+' '+L2.split(' ')[4].rstrip()
+                                    if L2.find("Job Id:") != -1: job_id = L2.split(' ')[len(L2.split(' '))-1].rstrip()
+                                f2.close                                      
+                    f.close
 
     # Read input scene .xml file to extract remaining metadata details
     if input_xml_file != 'not found':
@@ -272,7 +303,8 @@ def setup_yaml():
 
 setup_yaml()
 
-# Product yaml file for each scene in directory
+# Define ARD_output_log_directory where the .list and .out log processing files exist
+ARD_output_log_directory = '/g/data/qd04/Cate/log_dual_pol_test/'
 ARD_scene_directory = '/g/data/qd04/Cate/Sentinel-1/C-SAR/SLC/'
 for root, dirs, files in os.walk(ARD_scene_directory):
     for file in files:
@@ -290,3 +322,4 @@ for root, dirs, files in os.walk(ARD_scene_directory):
                         yaml.dump(dic, stream, default_flow_style=False)
                 except:
                     print("Error preping dataset:", scene)
+
