@@ -319,4 +319,3 @@ for root, dirs, files in os.walk(ARD_scene_directory):
                         yaml.dump(dic, stream, default_flow_style=False)
                 except:
                     print("Error preping dataset:", scene)
-
