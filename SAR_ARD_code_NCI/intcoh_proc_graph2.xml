@@ -11,8 +11,8 @@
       <srpNumberPoints>501</srpNumberPoints>
       <orbitDegree>3</orbitDegree>
       <includeCoherence>true</includeCoherence>
-      <cohWinAz>2</cohWinAz>
-      <cohWinRg>10</cohWinRg>
+      <cohWinAz>9</cohWinAz>
+      <cohWinRg>30</cohWinRg>
       <squarePixel>true</squarePixel>
     </parameters>
   </node>
