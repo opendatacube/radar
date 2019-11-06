@@ -261,13 +261,15 @@ if len(sys.argv)>1:
     exit()
 
 
-files = glob.glob('/g/data/dz56/backscatter/Sentinel-1/C-SAR/GRD/2018/**/*.dim',recursive=True)                             
+import glob
+
+scenes = glob.glob('/g/data/dz56/backscatter/Sentinel-1/C-SAR/GRD/2018/**/*.dim',recursive=True)                             
 outputdir = 'backscatter_yamls'
 if not os.path.exists(outputdir): os.mkdir(outputdir)
 
-for scene in files:
+for scene in scenes:
     yaml_path = os.path.join(outputdir, os.path.basename(scene).replace('.dim','.yaml'))
-    print('yaml_path =',yaml_path)
+    #print('yaml_path =',yaml_path)
     if not os.path.exists(yaml_path):
         try:
             metadata = prep_dataset(scene)
