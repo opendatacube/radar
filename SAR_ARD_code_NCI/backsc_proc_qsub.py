@@ -215,6 +215,8 @@ def main():
                          help="Debug: use to only display job commands. Default is %(default)s." )
     parser.add_argument( "--reprocess_existing", action='store_true', 
                          help="Re-process already processed scenes with existing output files. Default is %(default)s." )
+    parser.add_argument( "--exclude", default=None,
+                         help="A list of files to exclude (e.g. problematic) from processing.")
     parser.add_argument( "--gpt_exec", default=None,
                          help="Path to local GPT executable (possibly a symlink). Default is to load GPT from the SNAP module." )
     parser.add_argument( "--VDI_jobs", action='store_true', 
@@ -340,6 +342,16 @@ def main():
         if nproc!=0:
             print("A total of %i scenes (of %i) were found to be already processed (not re-processing)." % (nproc,tmp) )
     
+    if cmdargs.exclude:
+        exclude = [l.split()[0].strip() for l in open(cmdargs.exclude).readlines()]
+        tmp = len(filepaths)
+        ind = [ii for ii,ff in enumerate(filepaths) if not ff in exclude]
+        filepaths = [filepaths[ii] for ii in ind]
+        SARA_IDs = [SARA_IDs[ii] for ii in ind]     # corresponding SARA IDs
+        nproc = tmp - len(filepaths)
+        if nproc!=0:
+            print("A total of %i scenes (of %i) were excluded (not processing)." % (nproc,tmp) )
+        
     n_scenes = len(filepaths)
     if n_scenes==0: 
         print("Found no (new) scene to process.")
