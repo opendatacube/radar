@@ -1,10 +1,16 @@
 name: s1_gamma0_scene
 description: Sentinel-1A/B SAR Gamma0 scenes, processed to the CEOS ARD standard - Orbit updates, GRD border noise, thermal noise, radiometric calibration and terrain correction, orthorectification.
-metadata_type: eo
+metadata_type: sentinel1_scene
+
+storage:
+    crs: EPSG:3577
+    resolution:
+        x: 25.0
+        y: -25.0
 
 metadata:
   format: {name: ENVI}
-  instrument: {name: SAR}
+  instrument: {name: SAR_C}
   platform: {code: SENTINEL_1}
   product_type: gamma0
 
@@ -18,3 +24,9 @@ measurements:
   units: '1'
   dtype: float32
   nodata: 0
+
+- name: lia
+  units: '1'
+  dtype: float32
+  nodata: 0
+  aliases: [local_incidence_angle, linci, incidence]
