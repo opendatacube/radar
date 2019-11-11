@@ -1,6 +1,6 @@
-name: s1_gamma0_scene
+name: s1_gamma0_scene_alpha
 description: Sentinel-1A/B SAR Gamma0 scenes, processed to the CEOS ARD standard - Orbit updates, GRD border noise, thermal noise, radiometric calibration and terrain correction, orthorectification.
-metadata_type: sentinel1_scene
+metadata_type: sentinel1_scene_meta
 
 storage:
     crs: EPSG:3577

@@ -1,0 +1,145 @@
+dataset:
+    creation_dt:
+    - creation_dt
+    format:
+    - format
+    - name
+    grid_spatial:
+    - grid_spatial
+    - projection
+    id:
+    - id
+    label:
+    - ga_label
+    measurements:
+    - image
+    - bands
+    search_fields:
+        format:
+            description: File format (GeoTiff, NetCDF)
+            indexed: false
+            offset:
+            - format
+            - name
+        instrument:
+            description: Instrument name
+            offset:
+            - instrument
+            - name
+        lat:
+            description: Latitude range
+            max_offset:
+            -   - extent
+                - coord
+                - ur
+                - lat
+            -   - extent
+                - coord
+                - lr
+                - lat
+            -   - extent
+                - coord
+                - ul
+                - lat
+            -   - extent
+                - coord
+                - ll
+                - lat
+            min_offset:
+            -   - extent
+                - coord
+                - ur
+                - lat
+            -   - extent
+                - coord
+                - lr
+                - lat
+            -   - extent
+                - coord
+                - ul
+                - lat
+            -   - extent
+                - coord
+                - ll
+                - lat
+            type: double-range
+        lon:
+            description: Longitude range
+            max_offset:
+            -   - extent
+                - coord
+                - ul
+                - lon
+            -   - extent
+                - coord
+                - ur
+                - lon
+            -   - extent
+                - coord
+                - ll
+                - lon
+            -   - extent
+                - coord
+                - lr
+                - lon
+            min_offset:
+            -   - extent
+                - coord
+                - ul
+                - lon
+            -   - extent
+                - coord
+                - ur
+                - lon
+            -   - extent
+                - coord
+                - ll
+                - lon
+            -   - extent
+                - coord
+                - lr
+                - lon
+            type: double-range
+        platform:
+            description: Platform code
+            offset:
+            - platform
+            - code
+        product_type:
+            description: Product code
+            offset:
+            - product_type
+        time:
+            description: Acquisition time
+            max_offset:
+            -   - extent
+                - to_dt
+            min_offset:
+            -   - extent
+                - from_dt
+            type: datetime-range
+        mission_id:
+            description: Sentinel-1 mission id, S1A or S1B
+            offset:
+            - metadata_information
+            - mission_id
+        pass_direction:
+            description: Pass direction, ascending or descending
+            offset:
+            - metadata_information
+            - pass_direction
+        relative_orbit:
+            description: Relative orbit number
+            offset:
+            - metadata_information
+            - relative_orbit
+        slice:
+            description: Slice number
+            offset:
+            - metadata_information
+            - slice_number
+    sources:
+    - lineage
+    - source_datasets
+description: Scene based Sentinel-1 data.
+name: sentinel1_scene_meta

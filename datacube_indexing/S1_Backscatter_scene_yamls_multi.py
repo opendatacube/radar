@@ -70,7 +70,7 @@ def valid_region(images, mask_value=None):
                 mask |= new_mask
 
     # fill holes
-    mask = binary_erosion(binary_dilation(mask, square(20)), square(20))
+    #mask = binary_erosion(binary_dilation(mask, square(20)), square(20))
 
     shapes = rasterio.features.shapes(mask.astype('uint8'), mask=mask)
     shape = shapely.ops.unary_union([shapely.geometry.shape(shape) for shape, val in shapes if val == 1])
@@ -221,12 +221,16 @@ def prep_dataset(path):
         'format': {'name': 'ENVI'},
         'grid_spatial': {'projection': projection},
         'image': { 'bands': {b: {'path': p, 'nodata': 0, 'geotransform': geotransform, 'height': ast.literal_eval(height), 'width': ast.literal_eval(width)} for b,p in set(zip(bands,bandpathnames))} },
-        'metadata_information': {'metadata_filename': path, 'incidence_angle_near': ast.literal_eval(IN), 'incidence_angle_far': ast.literal_eval(IF), 'spacing_azimuth': ast.literal_eval(AS), 'spacing_range': ast.literal_eval(RS), 'dem_used': DEM},
+        'metadata_information': {'metadata_filename': path, 'mission_id': mission_id,
+                                 'orbit_number': abs_orbit, 'relative_orbit': '%03d'%int(rel_orbit), 
+                                 'pass_direction': pass_dir, 'polarisation': pol_values, 
+                                 'slice_number': '%03d'%int(SN),
+                                 'incidence_angle_near': ast.literal_eval(IN), 'incidence_angle_far': ast.literal_eval(IF), 'spacing_azimuth': ast.literal_eval(AS), 'spacing_range': ast.literal_eval(RS), 'dem_used': DEM},
         'pixel_origin': 'UL (0.5, 0.5)', 
         'processing_output_message': processing_message,
         'processing_output_file': processing_output_file,
         'geometric_accuracy':'unknown',
-        'lineage': { 'source_datasets': {'sentinel_1': {'mission_id': mission_id, 'identifier': scene_name, 'product_url': product_url, 'instrument': 'SAR_C', 'mode': mode, 'slice_number': ast.literal_eval(SN), 'format': 'SAFE', 'extent': { 'coord': S1extent, 'from_dt': str(t0), 'to_dt': str(t1), 'center_dt': str(centre_time)},  'orbit_number': abs_orbit, 'relative_orbit': rel_orbit, 'pass_direction': pass_dir, 'polarisation': pol_values, 'product_level': product_level, 'product_type': product_type, 'resolution': Resolution, 'looks_azimuth': ast.literal_eval(AL), 'looks_range': ast.literal_eval(RL), 'calibration_constant_dB': ast.literal_eval('0'), 'look_direction': 'right', 'centre_frequency_GHz': ast.literal_eval('5.405'), 'equivalent_number_looks': ast.literal_eval(ENL),
+        'lineage': { 'source_datasets': {'sentinel_1': {'identifier': scene_name, 'product_url': product_url, 'instrument': 'SAR_C', 'mode': mode, 'format': 'SAFE', 'extent': { 'coord': S1extent, 'from_dt': str(t0), 'to_dt': str(t1), 'center_dt': str(centre_time)}, 'product_level': product_level, 'product_type': product_type, 'resolution': Resolution, 'looks_azimuth': ast.literal_eval(AL), 'looks_range': ast.literal_eval(RL), 'calibration_constant_dB': ast.literal_eval('0'), 'look_direction': 'right', 'centre_frequency_GHz': ast.literal_eval('5.405'), 'equivalent_number_looks': ast.literal_eval(ENL),
         'noise_equivalent_sigma_zero': '-22dB', 'sensor_calibration_manuscripts': '"Radiometric accuracy and stability of sentinel-1A determined using point targets" (https://doi.org/10.1017/S1759078718000016), "Radiometric accuracy and stability of sentinel-1A determined using point targets" (https://doi.org/10.1017/S1759078718000016), "GMES Sentinel-1 mission" (https://doi.org/10.1016/j.rse.2011.05.028)'} } },
         'software_versions': {'SAR_ARD_code': {'repo_url': 'https://github.com/opendatacube/radar', 'version': '1.0.0'}, 'SNAP': {'repo_url': 'https://step.esa.int/main/download/', 'SNAP Graph Processing Framework version': SNAP_GPF, 'S1TBX SAR Processing version': SNAP_SAR, 'S1TBX Calibration version': SNAP_Cal} },
         'system_information': {'time_processed': time_processed, 'job_id': job_id}
@@ -263,20 +267,32 @@ if len(sys.argv)>1:
 
 import glob
 
-scenes = glob.glob('/g/data/dz56/backscatter/Sentinel-1/C-SAR/GRD/2018/**/*.dim',recursive=True)                             
-outputdir = 'backscatter_yamls'
+scenes = glob.glob('/g/data/dz56/backscatter/Sentinel-1/C-SAR/GRD/**/*.dim',recursive=True)                             
+outputdir = 'backscatter_yamls_v11'
 if not os.path.exists(outputdir): os.mkdir(outputdir)
 
-for scene in scenes:
+def make_yaml(scene, outputdir=outputdir):
     yaml_path = os.path.join(outputdir, os.path.basename(scene).replace('.dim','.yaml'))
-    #print('yaml_path =',yaml_path)
     if not os.path.exists(yaml_path):
         try:
             metadata = prep_dataset(scene)
-            print("scene =",scene)
             #For changing output order to that defined in the dic (otherwise it is alphabetical)
             dic = OrderedDict(metadata)
             with open(yaml_path,'w') as stream:
                 yaml.dump(dic, stream, default_flow_style=False)
+            print("scene =", scene)
+            return yaml_path
         except:
             print("Error preping dataset:", scene)
+            return None
+    else: 
+        return None
+
+pool = Pool(3)
+for yaml_path in pool.imap_unordered(make_yaml, scenes):
+    if yaml_path:
+       command = 'datacube -C radar.conf dataset add -p s1_gamma0_scene_v11 --confirm-ignore-lineage ' + yaml_path
+       os.system(command)
+            
+pool.close()
+pool.join()
