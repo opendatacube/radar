@@ -1,13 +1,14 @@
-# Add all SAR ARD scenes (containing .yaml files) within folder structure to the data cube
+
+# Index all SAR scenes (with .yaml files) within the given folder into data cube
 
 import os
 
-directory = '/Sentinel-1/C-SAR/SLC/'
-for root, dirs, files in os.walk(directory):
+for root, dirs, files in os.walk('s1_gamma0_scene_yamls'):
 	for file in files:
 		if file.endswith('.yaml'):
 			infile=os.path.join(root,file)
 			print("yaml file =",infile)
-			command = 'datacube dataset add ' + infile
+			command = 'datacube -C radar.conf dataset add -p s1_gamma0_scene --confirm-ignore-lineage ' + infile
 			os.system(command)
-print('Finished!')
+
+print('Finished gamma0!')
