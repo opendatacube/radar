@@ -18,9 +18,15 @@ The data within the data cube can be accessed within a jupyter notebook, for exa
 Data cubes require YAML files to define product specifications and index into data cubes. 
 The following describes the steps required in the creation of the three SAR ARD products in the data cube, including its indexing:
 
+**•     Add metadata type:**
+
+*$ datacube -C radar.conf metadata add sentinel1_scene_meta.yaml*
+
+This enables Sentinel-1 specific seach fields.
+
 **•	Define product:**
 
-*$ datacube product add S1_XXX_productdef.yaml*
+*$ datacube -C radar.conf product add S1_XXX_productdef.yaml*
 
 where XXX is either ‘Backscatter’ (Gamma0 backscatter), ‘DualPolDecomp’ (a-h-alpha dual polarimetric decomposition) 
 or ‘IntCoh’ (interferometric coherence). 
@@ -36,6 +42,6 @@ as well as retaining relevant metadata information required to meet CARD4L compl
 
 **•	Index each scene into datacube:**
 
-*$ datacube dataset add SAR_ARD_file.yaml*
+*$ datacube -C radar.conf dataset add SAR_ARD_file.yaml*
 
 This can be automated for multiple files using similar python code to *S1_datacube_index.py*.
