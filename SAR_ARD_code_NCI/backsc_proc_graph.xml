@@ -63,7 +63,7 @@
       <demName>External DEM</demName>
       <demResamplingMethod>BICUBIC_INTERPOLATION</demResamplingMethod>
       <externalDEMFile>${externalDEMFile}</externalDEMFile>
-      <externalDEMNoDataValue>0.0</externalDEMNoDataValue>
+      <externalDEMNoDataValue>-32768</externalDEMNoDataValue>
       <outputSimulatedImage>false</outputSimulatedImage>
       <reGridMethod>false</reGridMethod>
     </parameters>
