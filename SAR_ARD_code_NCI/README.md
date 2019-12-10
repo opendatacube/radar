@@ -2,6 +2,7 @@
 
 This code automates the processing of Sentinel-1 SAR data to ARD (analysis-ready data) products on the National Computing Infrastructure (NCI). The processing uses the graph processing tool (GPT) from the SNAP toolbox to produce backscatter (`backsc`), dual polarimetry decomposition (`dualpol`), and interferometric coherence (`intcoh`) ARD products. The code also has options to run the processing on the NCI's Virtual Desktop Infrastructure (VDI).
 
+This branch has been updated to work on NCI's Gadi and SNAP 7.0. Only backscatter processing has been fully tested.
 
 ## Getting Started
 
@@ -46,6 +47,7 @@ The user can, however, modify this memory amount. This can be done by editing th
 
 The user needs to be aware of this internal limit as it determines how much RAM is used / requested by SNAP during the processing. Therefore, upon submitting to PBS, the user must ensure that the NCI job's MEM request is **larger** than this specific SNAP memory limit (currently set to 88GB in the code). In the implementation of the code above, the internal SNAP MEM limit is assumed to be `-Xmx=65GB`, and the code submits PBS jobs with a MEM request of 88GB. 
 
+Compute usage is charged based on both CPU and memory request on Gadi. A smaller memory of 16GB is therefore set in gpt.vmoptions and requested in PBS.
 
 ### Python module `requests`
 
@@ -98,5 +100,7 @@ When / if the update process reaches (and hangs at) the "updates = 0" stage, the
 **Note**: as well as fixing the above-mentioned post-March '18 issue, updating SNAP may potentially also break other parts of the SNAP processing routine! Updates of the SNAP software is at the user's own risk!
 
 
-# Author
+# Authors
 **Eric Lehmann**, CSIRO Data61, as part of the joint CSIRO -- GA SAR ARD DataCube project.
+
+**Fang Yuan**, GA, updated scripts to work on Gadi.
