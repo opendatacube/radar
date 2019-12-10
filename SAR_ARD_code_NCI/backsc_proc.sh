@@ -26,9 +26,11 @@
 #####################################################################
 
 
-module load gdal
-module unload python3/3.4.3 python3/3.4.3-matplotlib	# to avoid error messages on VDI
-module load python3/3.4.3 python3/3.4.3-matplotlib
+module use /g/data/v10/public/modules/modulefiles
+module load dea
+#module load gdal
+#module unload python3/3.4.3 python3/3.4.3-matplotlib	# to avoid error messages on VDI
+#module load python3/3.4.3 python3/3.4.3-matplotlib
 
 
 # "hard-coded" files and folders:
@@ -110,6 +112,8 @@ while read -r line; do
 	if [ -d $output_dir ]; then rm -r $output_dir; fi
 	if [ -f $output_file ]; then rm $output_file; fi
 	if [ -f $yaml_info_file ]; then rm $yaml_info_file; fi
+	output_basedir=`dirname $output_file`
+	if [ ! -d $output_basedir ]; then mkdir -p $output_basedir; fi
 	
 	# info to yaml file:
 	echo "input scene: $scene_zip_file" > $yaml_info_file
@@ -126,7 +130,7 @@ while read -r line; do
 	
 	# create DEM mosaic for current scene
 	echo; echo "~~~ Generating DEM data for current scene ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-	python3.4 make_DEM.py --scene_file $scene_zip_file --DEM_source $DEM_SOURCE --output_file $dem_out_file
+	python make_DEM.py --scene_file $scene_zip_file --DEM_source $DEM_SOURCE --output_file $dem_out_file
 	if [ ! $? -eq 0 ]; then
 		echo Scene processed \($cnt of $tot\): \#\#\# NOT OK -- error generating DEM data \#\#\#
 		echo "scene processed: NOT OK -- error generating DEM data" >> $yaml_info_file
@@ -247,13 +251,13 @@ echo
 
 
 #=== Post-process dodgy .out file (output from terrain flattening step) ==================================
-if [ -z "$VDI_JOB" ]; then	# job executed on NCI
-	echo; echo "=== Post-processing job's .out file ==========================================="
-	proc_out_file=${ARG_FILE_LIST/.list/.out}
-	pproc_base=${ARG_FILE_LIST/.list/_postproc}
-	
-	qsub_cmd="qsub -o ${pproc_base}.out -e ${pproc_base}.err -v PROC_OUT_FILE=$proc_out_file -P $NCI_PROJ postproc_out_file.sh"
-	echo $qsub_cmd
-	$qsub_cmd
-	echo
-fi
+#if [ -z "$VDI_JOB" ]; then	# job executed on NCI
+#	echo; echo "=== Post-processing job's .out file ==========================================="
+#	proc_out_file=${ARG_FILE_LIST/.list/.out}
+#	pproc_base=${ARG_FILE_LIST/.list/_postproc}
+#	
+#	qsub_cmd="qsub -o ${pproc_base}.out -e ${pproc_base}.err -v PROC_OUT_FILE=$proc_out_file -P $NCI_PROJ postproc_out_file.sh"
+#	echo $qsub_cmd
+#	$qsub_cmd
+#	echo
+#fi

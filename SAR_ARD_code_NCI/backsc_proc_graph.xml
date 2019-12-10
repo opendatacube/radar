@@ -48,9 +48,8 @@
       <createBetaBand>false</createBetaBand>
       <selectedPolarisations/>
       <outputSigmaBand>false</outputSigmaBand>
-      <outputGammaBand>true</outputGammaBand>
+      <outputGammaBand>false</outputGammaBand>
       <outputBetaBand>true</outputBetaBand>
-      <!-- <outputDNBand>false</outputDNBand> -->
     </parameters>
   </node>
   <node id="Terrain-Flattening">
@@ -64,8 +63,10 @@
       <demResamplingMethod>BICUBIC_INTERPOLATION</demResamplingMethod>
       <externalDEMFile>${externalDEMFile}</externalDEMFile>
       <externalDEMNoDataValue>-32768</externalDEMNoDataValue>
+      <externalDEMApplyEGM>false</externalDEMApplyEGM>
       <outputSimulatedImage>false</outputSimulatedImage>
-      <reGridMethod>false</reGridMethod>
+      <additionalOverlap>0.1</additionalOverlap>
+      <oversamplingMultiple>1.5</oversamplingMultiple>
     </parameters>
   </node>
   <node id="Terrain-Correction">
@@ -78,11 +79,15 @@
       <demName>External DEM</demName>
       <externalDEMFile>${externalDEMFile}</externalDEMFile>
       <externalDEMNoDataValue>-32768</externalDEMNoDataValue>
+      <externalDEMApplyEGM>false</externalDEMApplyEGM>
       <demResamplingMethod>BICUBIC_INTERPOLATION</demResamplingMethod>
       <imgResamplingMethod>BICUBIC_INTERPOLATION</imgResamplingMethod>
       <pixelSpacingInMeter>${pixelSpacingInMeter}</pixelSpacingInMeter>
       <!-- <pixelSpacingInDegree>2.2457882102988038E-4</pixelSpacingInDegree> -->
       <mapProjection>EPSG:3577</mapProjection>
+      <alignToStandardGrid>true</alignToStandardGrid>
+      <standardGridOriginX>0.0</standardGridOriginX>
+      <standardGridOriginY>0.0</standardGridOriginY>
       <nodataValueAtSea>false</nodataValueAtSea>
       <saveDEM>false</saveDEM>
       <saveLatLon>false</saveLatLon>

@@ -130,22 +130,22 @@ SARAQURL = "https://copernicus.nci.org.au/sara.server/1.0/api/collections/S1/sea
 JOB_SCRIPT = "backsc_proc.sh"  # name of PBS shell script to carry out the backscatter processing
 DEM_MAKE_FILE = "make_DEM.py"                   # for consistency checks only -- as used in JOB_SCRIPT
 XML_GRAPH = "backsc_proc_graph.xml"            # for consistency checks only -- as defined in JOB_SCRIPT
-ORBITS_DIR = "/g/data1a/qd04/SNAP_Orbits_data"  # for consistency checks only -- "usual" directory of orbit files...
+ORBITS_DIR = "/g/data/dz56/SNAP_Orbits_data"  # for consistency checks only -- "usual" directory of orbit files...
 DEF_PIXEL_RES = "25.0"      # string, default pixel resolution in output product (in [m])
 
-DEF_SAVE_DIR = "/g/data/qd04/Copernicus_Backscatter"     # default base directory of processed scenes outputs
+DEF_SAVE_DIR = "/g/data/dz56/Copernicus_Backscatter"     # default base directory of processed scenes outputs
 SOURCE_DIR = "/g/data/fj7/Copernicus/"      # "hard-coded" path to the Sentinel-1 data... (ends with '/')
 SOURCE_SUBDIR = "Sentinel-1"                # "hard-coded" next subdir in the source path... (no trailing '/')
-DEF_DEM_DIR = "/g/data1a/qd04/SNAP_DEM_data"    # default directory of DEM data (SNAP's .hgt files of DEM data)
+DEF_DEM_DIR = "/g/data/dz56/SNAP_DEM_data"    # default directory of DEM data (SNAP's .hgt files of DEM data)
 
-DEF_SCENES_PER_JOB = 10     # default nr of scenes per job submitted to PBS
-WALLTIME_PER_SCENE = 45     # in [min]; estimate of required walltime to process one scene on 'N_CPUS'
-N_CPUS = 8                  # number of cpus to use for each PBS job
-MEM_REQ = 88                # in [GB]; MEM (RAM) requirements for PBS job
-MEM_JOBFS_REQ = 10          # in [GB]; job's local filesystem MEM requirements (for DEM file only)
+DEF_SCENES_PER_JOB = 20     # default nr of scenes per job submitted to PBS
+WALLTIME_PER_SCENE = 144    # in [min]; estimate of required walltime to process one scene on 'N_CPUS'
+N_CPUS = 4                  # number of cpus to use for each PBS job
+MEM_REQ = 16                # in [GB]; MEM (RAM) requirements for PBS job; set to be the same as snap/bin/gpt.vmoptions
+MEM_JOBFS_REQ = 2           # in [GB]; job's local filesystem MEM requirements (for DEM file only)
 MAX_N_JOBS = 300            # https://opus.nci.org.au/display/Help/Raijin+User+Guide#RaijinUserGuide-QueueLimits
 DEF_QUEUE = "normal"        # default NCI queue to use
-DEF_NCI_PROJECT = "qd04"    # default NCI project to use
+DEF_NCI_PROJECT = "u46"    # default NCI project to use
 
 # Note on MEM_REQ value: the SNAP software on the NCI is typically installed (both local install and when using 
 # 'module load') with a definition of the maximum usable MEM allocation of 65GB (see -Xmx value in the folder:
@@ -428,7 +428,7 @@ def main():
             dlstr += ",ncpus=%i" % N_CPUS
             dlstr += ",mem=%iGB" % MEM_REQ
             dlstr += ",jobfs=%iGB" % MEM_JOBFS_REQ
-            dlstr += ",wd,other=gdata1"
+            dlstr += ",wd,storage=gdata/dz56"
             dostr = "-o %s" % (slist_name + '.out')
             dostr += " -e %s" % (slist_name + '.err')
             dvstr = "-v ARG_FILE_LIST=%s" % (slist_name + '.list')
